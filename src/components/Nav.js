@@ -9,7 +9,7 @@ const Nav = () => {
   return (
     <Wrapper>
       <h2 className='title'>
-        <Link to='/' style={{ color: "white" }}>
+        <Link to='/' style={{ color: "white" }} className='main-icon'>
           Memories <span>App</span>
         </Link>
       </h2>
@@ -47,6 +47,7 @@ const Wrapper = styled.nav`
   background: var(--primary-500);
   padding-right: 1rem;
   padding-left: 1rem;
+
   .login {
     width: 7rem;
     text-align: center;
@@ -67,6 +68,7 @@ const Wrapper = styled.nav`
     color: white;
     font-size: 2rem;
   }
+
   .user-info {
     display: flex;
     align-items: center;
@@ -77,6 +79,7 @@ const Wrapper = styled.nav`
       display: none;
     }
   }
+
   @media screen and (min-width: 992px) {
     .user-info {
       p {

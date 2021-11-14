@@ -7,7 +7,6 @@ import {
   CLOSE_SIDEBAR,
   UPDATE_POST_DATA,
   UPDATE_IMAGE,
-  GET_ALL_POSTS,
   CREATE_POST,
   CLEAR_POST_DATA,
   UPDATE_POST,
@@ -16,6 +15,7 @@ import {
   START_LOADING,
   UPDATE_EDIT_ID,
   GET_ALL_POSTS_COMPLETE,
+  UPDATE_PAGE_NUMBER,
 } from "../constants";
 
 export const url = "http://localhost:5000";
@@ -37,6 +37,9 @@ const initialState = {
   pageNumber: 1,
   postPerPage: 3,
   allPosts: [],
+  isPosting: false,
+  isDelete: false,
+  isUpdating: false,
 };
 
 const PostProvider = ({ children }) => {
@@ -71,24 +74,7 @@ const PostProvider = ({ children }) => {
     dispatch({ type: UPDATE_IMAGE, payload: value });
   };
 
-  //get post
-  const getPosts = async () => {
-    try {
-      dispatch({ type: START_LOADING });
-      //MAKE PAGES DINAMIC USING THE CONTEXT
-      const { data } = await axios.get(`${url}/posts?page=${state.pageNumber}`);
-      // console.log(data);
-      dispatch({ type: GET_ALL_POSTS, payload: data.allPosts });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   //get all posts
-  const getAllPosts = async () => {
-    const { data } = await axios.get(`${url}/posts`);
-
-    dispatch({ type: GET_ALL_POSTS_COMPLETE, payload: data.allPosts });
-  };
 
   //create post
   const createPost = async () => {
@@ -101,6 +87,7 @@ const PostProvider = ({ children }) => {
           },
         });
         dispatch({ type: CREATE_POST, payload: data.newPost });
+        getAllPosts("create");
       } catch (error) {
         console.log(error);
       }
@@ -125,6 +112,7 @@ const PostProvider = ({ children }) => {
         },
       });
       dispatch({ type: UPDATE_POST, payload: data.updatedPost });
+      getAllPosts("update");
     } catch (error) {
       console.log(error);
     }
@@ -140,6 +128,7 @@ const PostProvider = ({ children }) => {
       });
 
       dispatch({ type: DELETE_POST, payload: data.deletedPost });
+      getAllPosts("delete");
     }
   };
 
@@ -162,12 +151,22 @@ const PostProvider = ({ children }) => {
 
   //pagination
   const updatePageNumber = (move) => {
-    dispatch({ type: "UPDATE_PAGE_NUMBER", payload: move });
+    dispatch({ type: UPDATE_PAGE_NUMBER, payload: move });
   };
+  const updatePageNumberBtn = (index) => {
+    dispatch({ type: "UPDATE_PAGE_NUMBER_BTN", payload: index });
+  };
+
+  const getAllPosts = async (type) => {
+    dispatch({ type: START_LOADING, payload: type });
+    const { data } = await axios.get(`${url}/posts`);
+
+    dispatch({ type: GET_ALL_POSTS_COMPLETE, payload: data.allPosts });
+  };
+
   useEffect(() => {
-    getPosts();
-    getAllPosts();
-  }, [state.pageNumber]);
+    getAllPosts("loading");
+  }, []);
 
   return (
     <PostContext.Provider
@@ -184,6 +183,7 @@ const PostProvider = ({ children }) => {
         deletePost,
         likePost,
         updatePageNumber,
+        updatePageNumberBtn,
       }}
     >
       {children}

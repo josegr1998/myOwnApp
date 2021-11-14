@@ -4,7 +4,6 @@ import {
   CLOSE_SIDEBAR,
   UPDATE_POST_DATA,
   UPDATE_IMAGE,
-  GET_ALL_POSTS,
   CREATE_POST,
   CLEAR_POST_DATA,
   UPDATE_POST,
@@ -13,6 +12,7 @@ import {
   START_LOADING,
   UPDATE_EDIT_ID,
   GET_ALL_POSTS_COMPLETE,
+  UPDATE_PAGE_NUMBER,
 } from "../constants";
 
 const reducer = (state, action) => {
@@ -44,18 +44,39 @@ const reducer = (state, action) => {
         tags: [],
         selectedFile: "",
       },
+      isPosting: true,
     };
   }
 
   if (action.type === START_LOADING) {
-    return { ...state, isLoading: true };
+    if (action.payload === "loading") {
+      return { ...state, isLoading: true };
+    }
+    if (action.payload === "create") {
+      return { ...state, isPosting: true };
+    }
+    if (action.payload === "delete") {
+      return { ...state, isDelete: true };
+    }
+    if (action.payload === "update") {
+      return { ...state, isUpdating: true };
+    }
   }
-  if (action.type === GET_ALL_POSTS) {
-    console.log(action.payload);
-    return { ...state, posts: action.payload, isLoading: false };
-  }
+
   if (action.type === GET_ALL_POSTS_COMPLETE) {
-    return { ...state, allPosts: action.payload };
+    const skip = (state.pageNumber - 1) * state.postPerPage;
+
+    const pagePosts = action.payload.slice(skip, skip + state.postPerPage);
+
+    return {
+      ...state,
+      allPosts: action.payload,
+      posts: pagePosts,
+      isLoading: false,
+      isPosting: false,
+      isDelete: false,
+      isUpdating: false,
+    };
   }
   if (action.type === UPDATE_EDIT_ID) {
     const editPost = state.posts.find((item) => {
@@ -109,7 +130,7 @@ const reducer = (state, action) => {
         return item;
       }
     });
-    return { ...state, posts: newPosts };
+    return { ...state, posts: newPosts, isDelete: true };
   }
   if (action.type === LIKE_POST) {
     const newPosts = state.posts.map((item) => {
@@ -121,7 +142,7 @@ const reducer = (state, action) => {
     });
     return { ...state, posts: newPosts };
   }
-  if (action.type === "UPDATE_PAGE_NUMBER") {
+  if (action.type === UPDATE_PAGE_NUMBER) {
     let newPageNumber;
 
     if (action.payload === "inc") {
@@ -135,12 +156,21 @@ const reducer = (state, action) => {
     if (action.payload === "dec") {
       newPageNumber = state.pageNumber - 1;
       if (newPageNumber < 1) {
-        newPageNumber = Math.ceil(
-          state.allPosts.length / state.postPerPage - 1
-        );
+        newPageNumber = Math.ceil(state.allPosts.length / state.postPerPage);
       }
     }
-    return { ...state, pageNumber: newPageNumber };
+    const skip = (newPageNumber - 1) * state.postPerPage;
+
+    const pagePosts = state.allPosts.slice(skip, skip + state.postPerPage);
+
+    return { ...state, pageNumber: newPageNumber, posts: pagePosts };
+  }
+  if (action.type === "UPDATE_PAGE_NUMBER_BTN") {
+    const skip = (action.payload - 1) * state.postPerPage;
+
+    const pagePosts = state.allPosts.slice(skip, skip + state.postPerPage);
+
+    return { ...state, pageNumber: action.payload, posts: pagePosts };
   }
   return state;
 };

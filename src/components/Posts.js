@@ -7,7 +7,8 @@ import { useUserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import Btns from "./Btns";
 const Posts = () => {
-  const { openSidebar, posts, isLoading } = usePostContext();
+  const { openSidebar, posts, isLoading, isPosting, isDelete, isUpdating } =
+    usePostContext();
   const { user } = useUserContext();
 
   if (isLoading) {
@@ -23,7 +24,45 @@ const Posts = () => {
       </Loading>
     );
   }
-
+  if (isPosting) {
+    return (
+      <Loading>
+        <h2>Posting...</h2>
+        <div class='lds-ring'>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </Loading>
+    );
+  }
+  if (isDelete) {
+    return (
+      <Loading>
+        <h2>Removing Post...</h2>
+        <div class='lds-ring'>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </Loading>
+    );
+  }
+  if (isUpdating) {
+    return (
+      <Loading>
+        <h2>Updating...</h2>
+        <div class='lds-ring'>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </Loading>
+    );
+  }
   return (
     <Wrapper>
       <div className='title-container'>
