@@ -61,6 +61,9 @@ const reducer = (state, action) => {
     if (action.payload === "update") {
       return { ...state, isUpdating: true };
     }
+    if (action.payload === "like") {
+      return { ...state };
+    }
   }
 
   if (action.type === GET_ALL_POSTS_COMPLETE) {

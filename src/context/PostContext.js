@@ -143,6 +143,7 @@ const PostProvider = ({ children }) => {
           },
         });
         dispatch({ type: LIKE_POST, payload: data.newPost });
+        getAllPosts("like");
       } catch (error) {
         console.log(error);
       }
