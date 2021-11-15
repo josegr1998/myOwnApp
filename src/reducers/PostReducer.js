@@ -13,6 +13,7 @@ import {
   UPDATE_EDIT_ID,
   GET_ALL_POSTS_COMPLETE,
   UPDATE_PAGE_NUMBER,
+  UPDATE_PAGE_NUMBER_BTN,
 } from "../constants";
 
 const reducer = (state, action) => {
@@ -168,7 +169,7 @@ const reducer = (state, action) => {
 
     return { ...state, pageNumber: newPageNumber, posts: pagePosts };
   }
-  if (action.type === "UPDATE_PAGE_NUMBER_BTN") {
+  if (action.type === UPDATE_PAGE_NUMBER_BTN) {
     const skip = (action.payload - 1) * state.postPerPage;
 
     const pagePosts = state.allPosts.slice(skip, skip + state.postPerPage);

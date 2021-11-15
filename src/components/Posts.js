@@ -79,7 +79,6 @@ const Posts = () => {
         )}
       </div>
 
-      {/*do map and return singlePosts with the mock data */}
       <div className='post-container'>
         {posts.map((post, index) => {
           return <SinglePost key={index} {...post} />;

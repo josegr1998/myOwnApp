@@ -16,6 +16,7 @@ import {
   UPDATE_EDIT_ID,
   GET_ALL_POSTS_COMPLETE,
   UPDATE_PAGE_NUMBER,
+  UPDATE_PAGE_NUMBER_BTN,
 } from "../constants";
 
 export const url = "https://my-memories-project-portfolio.herokuapp.com";
@@ -155,7 +156,7 @@ const PostProvider = ({ children }) => {
     dispatch({ type: UPDATE_PAGE_NUMBER, payload: move });
   };
   const updatePageNumberBtn = (index) => {
-    dispatch({ type: "UPDATE_PAGE_NUMBER_BTN", payload: index });
+    dispatch({ type: UPDATE_PAGE_NUMBER_BTN, payload: index });
   };
 
   const getAllPosts = async (type) => {

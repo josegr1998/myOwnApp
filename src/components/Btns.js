@@ -11,7 +11,6 @@ const Btns = () => {
   } = usePostContext();
 
   const numberOfPages = parseInt(Math.ceil(allPosts.length / postPerPage));
-  console.log(numberOfPages);
 
   const buttons = Array.from({ length: numberOfPages }, (item, index) => {
     return (

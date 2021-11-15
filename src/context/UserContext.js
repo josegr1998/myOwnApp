@@ -2,6 +2,7 @@ import React, { useContext, useReducer } from "react";
 import reducer from "../reducers/UserReducer";
 import axios from "axios";
 import { url } from "./PostContext";
+import { AUTH, UPDATE_USER_INFO, LOGOUT } from "../constants";
 
 const UserContext = React.createContext();
 
@@ -30,26 +31,25 @@ const UserProvider = ({ children }) => {
 
   const loginWithGoogle = (result, token) => {
     console.log(result, token);
-    dispatch({ type: "AUTH", payload: { result, token } });
+    dispatch({ type: AUTH, payload: { result, token } });
   };
 
   const updateUserInfo = (name, value) => {
-    dispatch({ type: "UPDATE_USER_INFO", payload: { name, value } });
+    dispatch({ type: UPDATE_USER_INFO, payload: { name, value } });
   };
 
   const signIn = async () => {
-    console.log(`im going here`);
     const response = await axios.post(`${url}/users/singup`, state.userInfo);
-    dispatch({ type: "AUTH", payload: response.data });
+    dispatch({ type: AUTH, payload: response.data });
   };
 
   const login = async () => {
     const response = await axios.post(`${url}/users/login`, state.userInfo);
-    dispatch({ type: "AUTH", payload: response.data });
+    dispatch({ type: AUTH, payload: response.data });
   };
 
   const logout = () => {
-    dispatch({ type: "LOGOUT" });
+    dispatch({ type: LOGOUT });
   };
 
   return (
