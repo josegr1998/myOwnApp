@@ -103,7 +103,7 @@ const Auth = () => {
                 : "Dont have an account? Sign up"}
             </button>
             <GoogleLogin
-              clientId='1004519010302-33loekvgo2c2jt5cmluro0r88ksjmqj7.apps.googleusercontent.com'
+              clientId={process.env.REACT_APP_GOOGLE_ID}
               render={(renderProps) => (
                 <button
                   onClick={renderProps.onClick}

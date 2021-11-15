@@ -18,7 +18,7 @@ import {
   UPDATE_PAGE_NUMBER,
 } from "../constants";
 
-export const url = "http://localhost:5000";
+export const url = "https://my-memories-project-portfolio.herokuapp.com";
 
 const PostContext = React.createContext();
 
