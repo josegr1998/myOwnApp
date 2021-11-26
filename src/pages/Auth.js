@@ -108,7 +108,7 @@ const Auth = () => {
                 <button
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
-                  className='btn'
+                  className='btn google-btn'
                 >
                   Google Sign In
                 </button>
@@ -151,6 +151,11 @@ const Wrapper = styled.section`
     background: var(--primary-300);
     display: block;
     margin: 0 auto;
+    padding: 0.25rem;
+  }
+  .google-btn {
+    height: 3.5rem;
+    padding: 0.4rem;
   }
 
   .btn:hover {
@@ -160,6 +165,7 @@ const Wrapper = styled.section`
     display: flex;
     margin-top: 2rem;
     align-items: center;
+    gap: 1rem;
   }
   .login {
     font-size: 1.5rem;

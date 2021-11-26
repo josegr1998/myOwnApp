@@ -66,7 +66,7 @@ const Wrapper = styled.nav`
   }
   .title {
     color: white;
-    font-size: 2rem;
+    font-size: 1.4rem;
   }
 
   .user-info {
