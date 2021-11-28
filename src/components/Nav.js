@@ -5,7 +5,7 @@ import { useUserContext } from "../context/UserContext";
 import { Avatar } from "@material-ui/core";
 
 const Nav = () => {
-  const { user, logout } = useUserContext();
+  const { user, logout, setErrorFalse } = useUserContext();
   return (
     <Wrapper>
       <h2 className='title'>
@@ -25,13 +25,19 @@ const Nav = () => {
               {/*porque cuando me logeo no proveo imagen */}
             </Avatar>
             <p style={{ textTransform: "capitalize" }}>{user.result.name}</p>
-            <button className='login' onClick={logout}>
+            <button
+              className='login'
+              onClick={() => {
+                logout();
+                setErrorFalse();
+              }}
+            >
               Logout
             </button>
           </div>
         </>
       ) : (
-        <Link to='/auth' className='login'>
+        <Link to='/auth' className='login' onClick={setErrorFalse}>
           Login
         </Link>
       )}

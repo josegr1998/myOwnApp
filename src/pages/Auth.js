@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
 import styled from "styled-components";
 import { useUserContext } from "../context/UserContext";
@@ -6,7 +6,14 @@ import { useNavigate } from "react-router";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(true);
-  const { updateUserInfo, loginWithGoogle, signIn, login } = useUserContext();
+  const {
+    updateUserInfo,
+    loginWithGoogle,
+    signIn,
+    login,
+    invalidCredentials,
+    setErrorFalse,
+  } = useUserContext();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -17,9 +24,17 @@ const Auth = () => {
       navigate("/");
     } else {
       login();
-      navigate("/");
     }
   };
+
+  useEffect(() => {
+    if (invalidCredentials === true) {
+      return;
+    }
+    if (invalidCredentials === false) {
+      navigate("/");
+    }
+  }, [invalidCredentials]);
 
   const googleSuccess = async (res) => {
     const result = res?.profileObj;
@@ -68,6 +83,11 @@ const Auth = () => {
                 </>
               )}
             </div>
+            {invalidCredentials && (
+              <h2 className='invalid-credentials'>
+                Invalid Credentials, Please Check User and Password
+              </h2>
+            )}
             <input
               type='text'
               className='input'
@@ -97,7 +117,15 @@ const Auth = () => {
           </form>
 
           <div className='s-container'>
-            <button className='login' onClick={() => setIsSignUp(!isSignUp)}>
+            <button
+              className='login'
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                if (isSignUp) {
+                  setErrorFalse();
+                }
+              }}
+            >
               {!isSignUp
                 ? "Already have an account? Try Login in"
                 : "Dont have an account? Sign up"}
@@ -176,6 +204,15 @@ const Wrapper = styled.section`
   }
   .login:hover {
     color: var(--primary-200);
+  }
+  .invalid-credentials {
+    color: white;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background: red;
+    border-radius: 1rem;
+    padding: 0.25rem;
   }
   @media screen and (min-width: 992px) {
     .container {

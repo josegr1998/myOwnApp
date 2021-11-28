@@ -2,7 +2,13 @@ import React, { useContext, useReducer } from "react";
 import reducer from "../reducers/UserReducer";
 import axios from "axios";
 import { url } from "./PostContext";
-import { AUTH, UPDATE_USER_INFO, LOGOUT } from "../constants";
+import {
+  AUTH,
+  UPDATE_USER_INFO,
+  LOGOUT,
+  INVALID_CREDENTIALS,
+  SET_ERROR_FALSE,
+} from "../constants";
 
 const UserContext = React.createContext();
 
@@ -23,6 +29,7 @@ const initialState = {
     password: "",
     confirmPassword: "",
   },
+  invalidCredentials: null,
   user: getUser(),
 };
 
@@ -44,8 +51,16 @@ const UserProvider = ({ children }) => {
   };
 
   const login = async () => {
-    const response = await axios.post(`${url}/users/login`, state.userInfo);
-    dispatch({ type: AUTH, payload: response.data });
+    try {
+      const response = await axios.post(`${url}/users/login`, state.userInfo);
+      dispatch({ type: AUTH, payload: response.data });
+    } catch (error) {
+      dispatch({ type: INVALID_CREDENTIALS });
+    }
+  };
+
+  const setErrorFalse = async () => {
+    dispatch({ type: SET_ERROR_FALSE });
   };
 
   const logout = () => {
@@ -61,6 +76,7 @@ const UserProvider = ({ children }) => {
         logout,
         signIn,
         login,
+        setErrorFalse,
       }}
     >
       {children}
