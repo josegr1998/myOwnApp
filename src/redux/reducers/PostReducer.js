@@ -99,7 +99,7 @@ export const PostReducer = (state = initialState, action) => {
   }
 
   if (action.type === UPDATE_EDIT_ID) {
-    const editPost = state.allPosts.find((item) => {
+    const editPost = state.posts.find((item) => {
       if (item._id === action.payload) {
         return item;
       }
@@ -119,7 +119,7 @@ export const PostReducer = (state = initialState, action) => {
     };
   }
   if (action.type === UPDATE_POST) {
-    const newPosts = state.allPosts.map((item) => {
+    const newPosts = state.posts.map((item) => {
       if (item._id === action.payload._id) {
         return action.payload;
       } else {
@@ -143,7 +143,7 @@ export const PostReducer = (state = initialState, action) => {
     };
   }
   if (action.type === DELETE_POST) {
-    const newPosts = state.allPosts.filter((item) => {
+    const newPosts = state.posts.filter((item) => {
       if (item._id !== action.payload._id) {
         return item;
       }
