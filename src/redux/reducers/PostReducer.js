@@ -1,5 +1,4 @@
 import axios from "axios";
-//fijarme si puedo arreglar el bug del like cuando cambio de pagina. Checkear que las demas funcionalidades anden bien cuando cambio de pagina
 import {
   OPEN_SIDEBAR,
   CLOSE_SIDEBAR,
