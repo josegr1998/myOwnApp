@@ -1,15 +1,19 @@
 import React from "react";
 import SinglePost from "./SinglePost";
 import styled from "styled-components";
-// import posts from "../mockData";
-import { usePostContext } from "../context/PostContext";
-import { useUserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import Btns from "./Btns";
+import { openSidebar } from "../redux/actions/postsActions";
+import { useDispatch, useSelector } from "react-redux";
+
 const Posts = () => {
-  const { openSidebar, posts, isLoading, isPosting, isDelete, isUpdating } =
-    usePostContext();
-  const { user } = useUserContext();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
+  const posts = useSelector((state) => state.posts.posts);
+  const isLoading = useSelector((state) => state.posts.isLoading);
+  const isPosting = useSelector((state) => state.posts.isPosting);
+  const isDelete = useSelector((state) => state.posts.isDelete);
+  const isUpdating = useSelector((state) => state.posts.isUpdating);
 
   if (isLoading) {
     return (
@@ -69,7 +73,7 @@ const Posts = () => {
         <h1>Latest posts</h1>
         <Btns />
         {user ? (
-          <button className='btn' onClick={openSidebar}>
+          <button className='btn' onClick={() => dispatch(openSidebar())}>
             create memory
           </button>
         ) : (

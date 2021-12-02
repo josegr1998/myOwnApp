@@ -3,13 +3,19 @@ import styled from "styled-components";
 import moment from "moment";
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
-import { usePostContext } from "../context/PostContext";
-import { useUserContext } from "../context/UserContext";
 import { FaTrash } from "react-icons/fa";
+import {
+  updateEditID,
+  deletePost,
+  likePost,
+  openSidebar,
+} from "../redux/actions/postsActions";
+import { useSelector, useDispatch } from "react-redux";
 
 const SinglePost = (props) => {
-  const { updateEditID, deletePost, likePost } = usePostContext();
-  const { user } = useUserContext();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.users.user);
   const {
     createdAt,
     _id,
@@ -29,7 +35,7 @@ const SinglePost = (props) => {
       ) ? (
         <>
           <AiOutlineLike
-            onClick={() => likePost(_id)}
+            onClick={() => dispatch(likePost(user, _id))}
             className='like-icon liked'
           />{" "}
           {likes.length > 2
@@ -38,26 +44,38 @@ const SinglePost = (props) => {
         </>
       ) : (
         <>
-          <AiOutlineLike onClick={() => likePost(_id)} className='like-icon' />
+          <AiOutlineLike
+            onClick={() => dispatch(likePost(user, _id))}
+            className='like-icon'
+          />
           {likes.length} {likes.length === 1 ? `like` : "likes"}
         </>
       );
     } else {
       return (
         <>
-          <AiOutlineLike onClick={() => likePost(_id)} className='like-icon' />{" "}
+          <AiOutlineLike
+            onClick={() => dispatch(likePost(user, _id))}
+            className='like-icon'
+          />{" "}
           &nbsp;like
         </>
       );
     }
   };
-  //darle menos ancho a las cards
+
   return (
     <Wrapper>
       <div className='img-container'>
         <img src={selectedFile} alt='' className='img' />
         {user && user.result._id === creator && (
-          <BsThreeDots className='icon' onClick={() => updateEditID(_id)} />
+          <BsThreeDots
+            className='icon'
+            onClick={() => {
+              dispatch(openSidebar());
+              dispatch(updateEditID(_id));
+            }}
+          />
         )}
       </div>
 
@@ -80,7 +98,7 @@ const SinglePost = (props) => {
 
         {user && user.result._id === creator && (
           <div className='trash-icon  t-icon'>
-            <FaTrash onClick={() => deletePost(_id)} />
+            <FaTrash onClick={() => dispatch(deletePost(_id, user))} />
           </div>
         )}
       </p>

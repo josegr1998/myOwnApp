@@ -68,3 +68,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+REFACTORED THE WHOLE APP FROM CONTEXT TO REDUX. IGNORE CONTEXT AND REDUCERS FOLDERS AS THEY ARE JUST AS A REFERENCE. ALL STATE MANAGED IN THE REDUX FOLDER

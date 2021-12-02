@@ -1,5 +1,5 @@
 import React, { useContext, useReducer } from "react";
-import reducer from "../reducers/UserReducer";
+import reducer from "../reducers(old)/UserReducer";
 import axios from "axios";
 import { url } from "./PostContext";
 import {

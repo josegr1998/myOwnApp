@@ -1,11 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../context/UserContext";
 import { Avatar } from "@material-ui/core";
+import { logout, setErrorFalse } from "../redux/actions/userActions";
+import { useSelector, useDispatch } from "react-redux";
 
 const Nav = () => {
-  const { user, logout, setErrorFalse } = useUserContext();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.users.user);
+
   return (
     <Wrapper>
       <h2 className='title'>
@@ -28,8 +32,8 @@ const Nav = () => {
             <button
               className='login'
               onClick={() => {
-                logout();
-                setErrorFalse();
+                dispatch(logout());
+                dispatch(setErrorFalse());
               }}
             >
               Logout

@@ -2,7 +2,6 @@ import Nav from "./components/Nav";
 import HomePage from "./pages/HomePage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //routes is new switch
 import Auth from "./pages/Auth";
-//element = {<Home/>}
 
 const App = () => {
   return (

@@ -1,14 +1,15 @@
-import { usePostContext } from "../context/PostContext";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  updatePageNumber,
+  updatePageNumberBtn,
+} from "../redux/actions/postsActions";
 
 const Btns = () => {
-  const {
-    pageNumber,
-    postPerPage,
-    allPosts,
-    updatePageNumber,
-    updatePageNumberBtn,
-  } = usePostContext();
+  const dispatch = useDispatch();
+  const pageNumber = useSelector((state) => state.posts.pageNumber);
+  const postPerPage = useSelector((state) => state.posts.postPerPage);
+  const allPosts = useSelector((state) => state.posts.allPosts);
 
   const numberOfPages = parseInt(Math.ceil(allPosts.length / postPerPage));
 
@@ -17,7 +18,7 @@ const Btns = () => {
       <button
         className={`number-btn ${index + 1 === pageNumber && "active"}`}
         onClick={() => {
-          updatePageNumberBtn(index + 1);
+          dispatch(updatePageNumberBtn(index + 1));
         }}
       >
         {index + 1}
@@ -32,7 +33,7 @@ const Btns = () => {
           name='dec'
           className='move-btn'
           onClick={(e) => {
-            updatePageNumber(e.target.name);
+            dispatch(updatePageNumber(e.target.name));
           }}
         >
           prev page
@@ -43,7 +44,7 @@ const Btns = () => {
           className='move-btn'
           name='inc'
           onClick={(e) => {
-            updatePageNumber(e.target.name);
+            dispatch(updatePageNumber(e.target.name));
           }}
         >
           next page

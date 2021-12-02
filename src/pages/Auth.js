@@ -1,29 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
 import styled from "styled-components";
-import { useUserContext } from "../context/UserContext";
 import { useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  updateUserInfo,
+  loginWithGoogle,
+  signIn,
+  login,
+  setErrorFalse,
+} from "../redux/actions/userActions";
 
 const Auth = () => {
+  const dispatch = useDispatch();
   const [isSignUp, setIsSignUp] = useState(true);
-  const {
-    updateUserInfo,
-    loginWithGoogle,
-    signIn,
-    login,
-    invalidCredentials,
-    setErrorFalse,
-  } = useUserContext();
+
   const navigate = useNavigate();
+  const invalidCredentials = useSelector(
+    (state) => state.users.invalidCredentials
+  );
+  const userInfo = useSelector((state) => state.users.userInfo);
 
   const handleSubmit = (e) => {
-    console.log(`im goin here`);
     e.preventDefault();
     if (!isSignUp) {
-      signIn();
+      dispatch(signIn(userInfo));
       navigate("/");
     } else {
-      login();
+      dispatch(login(userInfo));
     }
   };
 
@@ -40,7 +44,7 @@ const Auth = () => {
     const result = res?.profileObj;
     const token = res?.tokenId;
 
-    loginWithGoogle(result, token);
+    dispatch(loginWithGoogle(result, token));
 
     navigate("/");
     try {
@@ -68,7 +72,7 @@ const Auth = () => {
                     placeholder='First Name'
                     name='firstName'
                     onChange={(e) =>
-                      updateUserInfo(e.target.name, e.target.value)
+                      dispatch(updateUserInfo(e.target.name, e.target.value))
                     }
                   />
                   <input
@@ -77,7 +81,7 @@ const Auth = () => {
                     placeholder='Last Name'
                     name='lastName'
                     onChange={(e) =>
-                      updateUserInfo(e.target.name, e.target.value)
+                      dispatch(updateUserInfo(e.target.name, e.target.value))
                     }
                   />
                 </>
@@ -93,14 +97,18 @@ const Auth = () => {
               className='input'
               placeholder='Email'
               name='email'
-              onChange={(e) => updateUserInfo(e.target.name, e.target.value)}
+              onChange={(e) =>
+                dispatch(updateUserInfo(e.target.name, e.target.value))
+              }
             />
             <input
               type='password'
               className='input'
               placeholder='Password'
               name='password'
-              onChange={(e) => updateUserInfo(e.target.name, e.target.value)}
+              onChange={(e) =>
+                dispatch(updateUserInfo(e.target.name, e.target.value))
+              }
             />
             {!isSignUp && (
               <input
@@ -108,7 +116,9 @@ const Auth = () => {
                 className='input'
                 placeholder='Confirm Password'
                 name='confirmPassword'
-                onChange={(e) => updateUserInfo(e.target.name, e.target.value)}
+                onChange={(e) =>
+                  dispatch(updateUserInfo(e.target.name, e.target.value))
+                }
               />
             )}
             <button className='btn' type='submit'>
@@ -122,7 +132,7 @@ const Auth = () => {
               onClick={() => {
                 setIsSignUp(!isSignUp);
                 if (isSignUp) {
-                  setErrorFalse();
+                  dispatch(setErrorFalse());
                 }
               }}
             >

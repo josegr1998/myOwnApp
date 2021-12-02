@@ -1,6 +1,6 @@
 import React, { useContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import reducer from "../reducers/PostReducer";
+import reducer from "../reducers(old)/PostReducer";
 import { useUserContext } from "./UserContext";
 import {
   OPEN_SIDEBAR,

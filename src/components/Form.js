@@ -1,37 +1,41 @@
 import React from "react";
 import styled from "styled-components";
-import { usePostContext } from "../context/PostContext";
 import FileBase from "react-file-base64";
 import { FaTimes } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  updatePostData,
+  updateImage,
+  closeSidebar,
+  createPost,
+  updatePost,
+  clearPostData,
+  startLoading,
+} from "../redux/actions/postsActions";
 
 const Form = () => {
-  const {
-    postData,
-    updatePostData,
-    updateImage,
-    isSidebarOpen,
-    closeSidebar,
-    createPost,
-    editID,
-    updatePost,
-    clearPostData,
-  } = usePostContext();
+  const dispatch = useDispatch();
+
+  const postData = useSelector((state) => state.posts.postData);
+  const isSidebarOpen = useSelector((state) => state.posts.isSidebarOpen);
+  const editID = useSelector((state) => state.posts.editID);
+  const user = useSelector((state) => state.users.user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!editID) {
-      createPost();
-      closeSidebar();
+      dispatch(createPost(user, postData));
+      dispatch(closeSidebar());
     } else {
-      updatePost(editID, postData);
-      closeSidebar();
-      clearPostData();
+      dispatch(updatePost(editID, postData, user));
+      dispatch(closeSidebar());
+      dispatch(clearPostData());
     }
   };
   const close = () => {
-    closeSidebar();
+    dispatch(closeSidebar());
     if (editID) {
-      clearPostData();
+      dispatch(clearPostData());
     }
   };
 
@@ -45,18 +49,6 @@ const Form = () => {
           </div>
 
           <form onSubmit={handleSubmit}>
-            {/*it would be better to have the labels */}
-            {/* <input
-              className='input'
-              type='text'
-              placeholder='creator'
-              name='creator'
-              value={postData.creator}
-              onChange={(e) => {
-                updatePostData(e.target.name, e.target.value);
-              }}
-            /> */}
-
             <input
               className='input'
               type='text'
@@ -64,7 +56,7 @@ const Form = () => {
               name='title'
               value={postData.title}
               onChange={(e) => {
-                updatePostData(e.target.name, e.target.value);
+                dispatch(updatePostData(e.target.name, e.target.value));
               }}
             />
             <input
@@ -74,7 +66,7 @@ const Form = () => {
               name='message'
               value={postData.message}
               onChange={(e) => {
-                updatePostData(e.target.name, e.target.value);
+                dispatch(updatePostData(e.target.name, e.target.value));
               }}
             />
             <input
@@ -84,7 +76,7 @@ const Form = () => {
               name='tags'
               value={postData.tags}
               onChange={(e) => {
-                updatePostData(e.target.name, e.target.value);
+                dispatch(updatePostData(e.target.name, e.target.value));
               }}
             />
             <div className='file-container'>
@@ -94,7 +86,7 @@ const Form = () => {
                 type='file'
                 multiple={false}
                 onDone={
-                  (base64) => updateImage(base64.base64) //importante agregar
+                  (base64) => dispatch(updateImage(base64.base64)) //importante agregar
                 }
               />
             </div>
